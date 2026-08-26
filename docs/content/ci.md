@@ -10,13 +10,13 @@ Ripple's `--format github` emits a GitHub Actions matrix include list, so a sing
 The repository doubles as a composite action that downloads a release binary, verifies its checksum, and puts `ripple` on `PATH`. It supports Linux and macOS runners:
 
 ```yaml
-      - uses: charlesbthomas/ripple@main
+      - uses: charlesbthomas/ripple@v0.1.1
         with:
           version: latest    # or a specific release, e.g. "0.1.0"
       - run: ripple --version
 ```
 
-The `version` input accepts `latest` (default), `0.1.0`, or `v0.1.0`. Reference the action with `@main` for now; pin a release tag once one is published that includes the action (`v0.1.0` predates it).
+The `version` input accepts `latest` (default), `0.1.0`, or `v0.1.0`. The action ships with every release tag from `v0.1.1` onward, so the action ref and the installed version can be pinned independently.
 
 ## GitHub Actions matrix
 
@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: charlesbthomas/ripple@main
+      - uses: charlesbthomas/ripple@v0.1.1
       - id: ripple
         run: echo "matrix=$(ripple changed origin/main...HEAD --format github)" >> "$GITHUB_OUTPUT"
 
