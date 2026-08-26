@@ -5,6 +5,19 @@ description = "Run only the affected modules' jobs in CI"
 
 Ripple's `--format github` emits a GitHub Actions matrix include list, so a single detect job can fan out to exactly the modules a pull request affects.
 
+## Installing ripple
+
+The repository doubles as a composite action that downloads a release binary, verifies its checksum, and puts `ripple` on `PATH`. It supports Linux and macOS runners:
+
+```yaml
+      - uses: charlesbthomas/ripple@main
+        with:
+          version: latest    # or a specific release, e.g. "0.1.0"
+      - run: ripple --version
+```
+
+The `version` input accepts `latest` (default), `0.1.0`, or `v0.1.0`. Reference the action with `@main` for now; pin a release tag once one is published that includes the action (`v0.1.0` predates it).
+
 ## GitHub Actions matrix
 
 ```yaml
@@ -17,6 +30,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - uses: charlesbthomas/ripple@main
       - id: ripple
         run: echo "matrix=$(ripple changed origin/main...HEAD --format github)" >> "$GITHUB_OUTPUT"
 
