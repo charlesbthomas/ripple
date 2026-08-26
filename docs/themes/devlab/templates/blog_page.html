@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% import "macros/utilities/posts.html" as posts %}
+{% import "macros/utilities/comments.html" as comments %}
+{% import "macros/utilities/blogleft.html" as blog_head %}
+
+{%- block title -%}
+  {{ page.title | safe }} - {{ config.title | safe }}
+{%- endblock title -%}
+
+
+{%- block head -%}
+  {{- head::head(page = page) -}}
+{%- endblock head -%}
+
+
+{%- block sidebar -%}
+  {{ sidebar::sidebar(type = "page") }}
+{%- endblock sidebar -%}
+
+
+{%- block header -%}
+  {{ header::header(page = page, type = "page") }}
+{%- endblock header -%}
+
+{%- block content -%}
+  <main class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-11 col-lg-10 col-xxl-9">
+        <h1>
+          {{ page.title | safe }}
+        </h1>
+        <div class="row">
+            <div class="blog-head-left col-6">
+                {{ blog_head::left() }}
+            </div>
+            <div class="blog-head-right col-6">
+                {{ blog_head::right() }}
+            </div>
+        </div>
+
+        {%- if page.extra.image.visible_in_page -%}
+          <div class="post-img mb-4 rounded-3">
+            <img
+              src="{{ get_url(path = page.extra.image.path) | safe }}"
+              class="img-fluid"
+              alt="{{ page.extra.image.alt | safe }}"
+            >
+          </div>
+        {%- endif -%}
+        <div class="mb-5">
+          {{ page.content | safe }}
+        </div>
+      </div>
+    </div>
+  </main>
+{%- endblock content -%}
+
+
+{%- block comments -%}
+  <div class="container">
+    <div class="row justify-content-center mt-3 mb-4">
+      <div class="col-11 col-lg-10 col-xxl-9">
+        {%- if page.extra.page_identifier -%}
+          {{ comments::disqus(page = page) }}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endblock comments -%}

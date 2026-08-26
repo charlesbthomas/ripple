@@ -1,0 +1,34 @@
+base_url = "https://charlesbthomas.github.io/ripple"
+title = "ripple"
+description = "Monorepo change detection: which modules changed for a given git diff"
+default_language = "en"
+theme = "devlab"
+compile_sass = false
+build_search_index = true
+
+[markdown.highlighting]
+style = "inline"
+theme = "github-light"
+
+[extra]
+author = "Charlie Thomas"
+locale = "en_US"
+avatar = ""
+message404 = "Page not found."
+
+[extra.seo]
+
+[extra.social]
+author_link = "https://github.com/charlesbthomas"
+links = [
+  { url = "https://github.com/charlesbthomas/ripple", name = "GitHub", icon = "bi-github" },
+]
+
+[extra.menus]
+nav = [
+  { url = "", name = "Home", icon = "bi-house", display = "visible" },
+  { url = "getting-started", name = "Getting Started", icon = "bi-lightning-charge", display = "visible" },
+  { url = "configuration", name = "Configuration", icon = "bi-gear", display = "visible" },
+  { url = "commands", name = "Commands", icon = "bi-terminal", display = "visible" },
+  { url = "ci", name = "CI", icon = "bi-arrow-repeat", display = "visible" },
+]

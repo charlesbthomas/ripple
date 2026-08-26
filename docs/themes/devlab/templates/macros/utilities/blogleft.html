@@ -1,0 +1,84 @@
+{%- macro left() -%}
+  <div class="col-auto">
+    <small class="text-muted">
+      Par :
+      <a
+        href="{{ config.extra.social.author_link | safe }}"
+        target="_blank" rel="noopener noreferrer"
+        class="text-decoration-none"
+      >
+        {{ config.extra.author | safe }}
+      </a>
+    </small>
+  </div>
+
+  <div class="col-auto mb-2">
+    <small class="text-muted">
+      Posté le
+      <time datetime="{{ page.date | safe }}">
+        <span
+          class="text-muted text-decoration-none"
+        >
+            {{ page.date | date(format="%e %b %Y") |
+                replace(from="Jan", to="Janvier") |
+                replace(from="Feb", to="Février") |
+                replace(from="Mar", to="Mars") |
+                replace(from="Apr", to="Avril") |
+                replace(from="May", to="Mai") |
+                replace(from="Jun", to="Juin") |
+                replace(from="Jul", to="Juillet") |
+                replace(from="Aug", to="Août") |
+                replace(from="Sep", to="Septembre") |
+                replace(from="Oct", to="Octobre") |
+                replace(from="Nov", to="Novembre") |
+                replace(from="Dec", to="Décembre")
+            }}
+        </span>
+      </time>
+    </small>
+  </div>
+
+  {% if page.updated %}
+    <div class="col-auto">
+      <small class="text-muted">
+        Mise à jour :
+        <time datetime="{{ page.updated | safe }}">
+          <span
+            class="text-muted text-decoration-none"
+          >
+            {{ page.date | date(format="%e %b %Y") |
+                replace(from="Jan", to="Janvier") |
+                replace(from="Feb", to="Février") |
+                replace(from="Mar", to="Mars") |
+                replace(from="Apr", to="Avril") |
+                replace(from="May", to="Mai") |
+                replace(from="Jun", to="Juin") |
+                replace(from="Jul", to="Juillet") |
+                replace(from="Aug", to="Août") |
+                replace(from="Sep", to="Septembre") |
+                replace(from="Oct", to="Octobre") |
+                replace(from="Nov", to="Novembre") |
+                replace(from="Dec", to="Décembre")
+            }}
+          </span>
+        </time>
+      </small>
+    </div>
+  {% endif %}
+{%- endmacro left -%}
+
+{%- macro right() -%}
+  {% if page.taxonomies.categories %}
+      <div class="col-auto">
+          <span class="bi bi-bookmarks fs-6 me-1"></span>
+          {{ posts::categories_btn(categories = page.taxonomies.categories) }}
+      </div>
+  {% endif %}
+  
+  {% if page.taxonomies.tags %}
+      <div class="col-auto">
+          <span class="bi bi-tags fs-6 me-1"></span>
+          {{ posts::tags_btn(tags = page.taxonomies.tags) }}
+      </div>
+  {% endif %}
+{%- endmacro right -%}

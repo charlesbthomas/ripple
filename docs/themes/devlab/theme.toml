@@ -1,0 +1,12 @@
+name = "devlab"
+description = "A personal theme focused on ease of reading."
+license = "MPL-2.0"
+homepage = "https://github.com/mothsart/devlab-zola"
+min_version = "0.17.1"
+
+[extra]
+
+
+[author]
+name = "Ferry Jérémie"
+homepage = "https://gersonbdev.github.io/"

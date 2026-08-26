@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% import "macros/utilities/pagination.html" as pagination %}
+
+
+{%- block title -%}
+  {{ config.title | safe }} - {{ term.name | safe }}
+{%- endblock title -%}
+
+
+{%- block sidebar -%}
+  {{ sidebar::sidebar(type = "section") }}
+{%- endblock sidebar -%}
+
+
+{%- block header -%}
+  {{ header::header(page = "null", type = "section") }}
+{%- endblock header -%}
+
+
+
+{%- block content -%}
+  <main class="container">
+    <div class="row justify-content-center mt-4 mb-4">
+      <div class="col-11">
+        <h1 class="mb-4 display-3">
+          {{ term.name | safe }}
+        </h1>
+        {% for page in paginator.pages %}
+          <article
+            class="card card-bg-light mb-4 pb-3 border border-0 border-bottom rounded-0"
+          >
+            <div class="row g-0">
+              <div class="card-body">
+                <a
+                  href="{{ page.permalink | safe }}"
+                  class="text-decoration-none"
+                >
+                  <h5 class="card-title h4">{{ page.title | safe }}</h5>
+                </a>
+                <p class="card-text text-dark">
+                  {{ page.summary | safe }}
+                </p>
+                <p class="card-text">
+                  <small class="text-muted">
+                    <span class="bi bi-calendar mx-1"></span>
+                      <time datetime="{{ page.date | safe }}">
+                        <span
+                          class="text-muted text-decoration-none"
+                        >
+                            {{ page.date | date(format="%e %b %Y") |
+                                replace(from="Jan", to="Janvier") |
+                                replace(from="Feb", to="Février") |
+                                replace(from="Mar", to="Mars") |
+                                replace(from="Apr", to="Avril") |
+                                replace(from="May", to="Mai") |
+                                replace(from="Jun", to="Juin") |
+                                replace(from="Jul", to="Juillet") |
+                                replace(from="Aug", to="Août") |
+                                replace(from="Sep", to="Septembre") |
+                                replace(from="Oct", to="Octobre") |
+                                replace(from="Nov", to="Novembre") |
+                                replace(from="Dec", to="Décembre")
+                            }}
+                        </span>
+                      </time>
+                  </small>
+                </p>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+  {{ pagination::pagination(paginator = paginator) }}
+{%- endblock content -%}
