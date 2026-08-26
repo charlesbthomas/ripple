@@ -21,10 +21,10 @@ Declare your dependency graph once in `ripple.toml`, then use one command locall
 ## Install
 
 ```sh
-cargo install --git https://github.com/charlesbthomas/ripple
+brew install charlesbthomas/tap/ripple
 ```
 
-Requires `git` on your PATH.
+Requires `git` on your PATH. See [Getting Started](@/getting-started.md) for other install methods.
 
 ## Quick start
 

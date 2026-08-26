@@ -7,6 +7,20 @@ description = "Install ripple and wire up your first module map"
 
 Ripple is a single binary with one external requirement: `git` on your PATH.
 
+Homebrew (macOS and Linux):
+
+```sh
+brew install charlesbthomas/tap/ripple
+```
+
+Shell installer (prebuilt binaries):
+
+```sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/charlesbthomas/ripple/releases/latest/download/ripple-installer.sh | sh
+```
+
+From source:
+
 ```sh
 cargo install --git https://github.com/charlesbthomas/ripple
 ```
