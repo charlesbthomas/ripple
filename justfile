@@ -16,3 +16,9 @@ build:
     cargo build --release
 
 check: fmt-check lint test
+
+docs-build:
+    cd docs && zola build
+
+docs-serve:
+    cd docs && zola serve
