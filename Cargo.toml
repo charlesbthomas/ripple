@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 description = "Monorepo change detection: which modules changed for a given git diff"
 license = "MIT"
+homepage = "https://github.com/charlesbthomas/ripple"
 repository = "https://github.com/charlesbthomas/ripple"
 
 [dependencies]
@@ -26,3 +27,8 @@ tempfile = "3"
 [profile.release]
 lto = true
 strip = true
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
