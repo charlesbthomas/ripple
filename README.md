@@ -34,6 +34,14 @@ From source:
 cargo install --git https://github.com/charlesbthomas/ripple
 ```
 
+GitHub Actions (installs a release binary and adds it to PATH):
+
+```yaml
+- uses: charlesbthomas/ripple@main
+  with:
+    version: latest
+```
+
 Requires `git` on your PATH.
 
 ## Quick start
