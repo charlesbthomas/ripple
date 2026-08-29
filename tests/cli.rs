@@ -183,6 +183,73 @@ fn changed_warns_on_unowned_files_and_strict_fails() {
 }
 
 #[test]
+fn changed_filter_restricts_output() {
+    let dir = fixture();
+    on_feature_with_core_change(&dir);
+    ripple(dir.path())
+        .args(["changed", "--filter", "web,docs"])
+        .assert()
+        .success()
+        .stdout("web\n");
+}
+
+#[test]
+fn changed_filter_is_repeatable() {
+    let dir = fixture();
+    on_feature_with_core_change(&dir);
+    ripple(dir.path())
+        .args(["changed", "--filter", "web", "--filter", "api"])
+        .assert()
+        .success()
+        .stdout("api\nweb\n");
+}
+
+#[test]
+fn changed_filter_rejects_unknown_modules() {
+    let dir = fixture();
+    on_feature_with_core_change(&dir);
+    ripple(dir.path())
+        .args(["changed", "--filter", "wbe"])
+        .assert()
+        .failure()
+        .stderr(predicate::str::contains("did you mean `web`?"));
+}
+
+#[test]
+fn changed_filter_empty_result_exits_zero() {
+    let dir = fixture();
+    on_feature_with_core_change(&dir);
+    ripple(dir.path())
+        .args(["changed", "--filter", "docs"])
+        .assert()
+        .success()
+        .stdout("");
+}
+
+#[test]
+fn changed_filter_does_not_bypass_strict() {
+    let dir = fixture();
+    git(dir.path(), &["checkout", "-b", "feature"]);
+    write(dir.path(), "stray.txt", "stray\n");
+    ripple(dir.path())
+        .args(["changed", "--strict", "--filter", "docs"])
+        .assert()
+        .failure()
+        .stderr(predicate::str::contains("--strict"));
+}
+
+#[test]
+fn changed_filter_applies_to_github_format() {
+    let dir = fixture();
+    on_feature_with_core_change(&dir);
+    ripple(dir.path())
+        .args(["changed", "--filter", "core", "--format", "github"])
+        .assert()
+        .success()
+        .stdout("{\"include\":[{\"module\":\"core\"}]}\n");
+}
+
+#[test]
 fn changed_with_no_changes_prints_nothing() {
     let dir = fixture();
     ripple(dir.path())

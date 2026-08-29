@@ -19,6 +19,7 @@ ripple changed HEAD~3..HEAD      # literal diff between two refs
 ripple changed --staged          # staged changes only (pre-commit)
 ripple changed --direct-only     # skip transitive dependents
 ripple changed --strict          # fail if any changed file has no owning module
+ripple changed --filter web,api  # only report on the named modules
 ```
 
 ### Diff selection
@@ -41,6 +42,10 @@ ripple changed --strict          # fail if any changed file has no owning module
 - `github` — a GitHub Actions matrix include list
 
 Changed files that no module owns are reported on stderr; `--strict` turns them into an error.
+
+### Filtering
+
+`--filter` restricts the report to the named modules (comma-separated or repeated), answering "did any of *these* change?" without piping through `grep`. Unknown module names are an error, so a typo cannot silently gate a CI job off forever. An empty filtered result still exits `0` — test for output instead. `--strict` is evaluated against the whole diff before filtering, so unowned files fail the run even when the filtered modules are unaffected.
 
 ## `ripple validate`
 

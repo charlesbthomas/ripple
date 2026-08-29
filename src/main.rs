@@ -19,7 +19,8 @@ fn main() {
             direct_only,
             format,
             strict,
-        } => commands::changed::run(diff, *direct_only, *format, *strict),
+            filter,
+        } => commands::changed::run(diff, *direct_only, *format, *strict, filter),
         Command::Validate => commands::validate::run(),
         Command::Graph {
             module,

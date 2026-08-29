@@ -61,7 +61,8 @@ Examples:
   ripple changed --staged               Only staged changes (pre-commit)
   ripple changed --direct-only          Skip transitive dependents
   ripple changed --format json | jq     Full report as JSON
-  ripple changed --format github        GitHub Actions matrix include list"
+  ripple changed --format github        GitHub Actions matrix include list
+  ripple changed --filter web,api       Only report on the named modules"
     )]
     Changed {
         #[command(flatten)]
@@ -80,6 +81,13 @@ Examples:
             help = "Exit with an error if any changed file has no owning module"
         )]
         strict: bool,
+        #[arg(
+            long,
+            value_name = "MODULES",
+            value_delimiter = ',',
+            help = "Restrict the report to these modules (comma-separated, repeatable)"
+        )]
+        filter: Vec<String>,
     },
 
     #[command(

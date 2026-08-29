@@ -1,15 +1,23 @@
 use crate::cli::{DiffArgs, Format};
 use crate::config::Config;
 use crate::engine::ChangedReport;
-use crate::graph::ModuleGraph;
+use crate::graph::{ModuleGraph, nearest_name};
 use crate::{config, engine, gitio, output};
 use anstream::eprintln;
 use anyhow::{Result, bail};
 use owo_colors::OwoColorize;
 use std::io::IsTerminal;
 
-pub fn run(diff: &DiffArgs, direct_only: bool, format: Format, strict: bool) -> Result<()> {
-    let report = compute_report(diff, direct_only)?;
+pub fn run(
+    diff: &DiffArgs,
+    direct_only: bool,
+    format: Format,
+    strict: bool,
+    filter: &[String],
+) -> Result<()> {
+    let root = config::find_root(&std::env::current_dir()?)?;
+    let config = config::load(&root)?;
+    let mut report = compute_report_with(&config, diff, direct_only)?;
 
     if !report.unowned_files.is_empty() {
         warn_unowned(&report.unowned_files);
@@ -19,6 +27,10 @@ pub fn run(diff: &DiffArgs, direct_only: bool, format: Format, strict: bool) -> 
                 output::plural(report.unowned_files.len(), "changed file")
             );
         }
+    }
+
+    if !filter.is_empty() {
+        apply_filter(&mut report, &config, filter)?;
     }
 
     match resolve_format(format) {
@@ -34,15 +46,38 @@ pub fn run(diff: &DiffArgs, direct_only: bool, format: Format, strict: bool) -> 
 pub fn compute_report(diff: &DiffArgs, direct_only: bool) -> Result<ChangedReport> {
     let root = config::find_root(&std::env::current_dir()?)?;
     let config = config::load(&root)?;
-    let graph = ModuleGraph::build(&config)?;
-    let files = changed_files(&config, diff)?;
-    let mut report = engine::compute(&config, &graph, &files)?;
+    compute_report_with(&config, diff, direct_only)
+}
+
+fn compute_report_with(
+    config: &Config,
+    diff: &DiffArgs,
+    direct_only: bool,
+) -> Result<ChangedReport> {
+    let graph = ModuleGraph::build(config)?;
+    let files = changed_files(config, diff)?;
+    let mut report = engine::compute(config, &graph, &files)?;
     if direct_only {
         report
             .modules
             .retain(|m| m.status == crate::engine::Status::Direct);
     }
     Ok(report)
+}
+
+fn apply_filter(report: &mut ChangedReport, config: &Config, filter: &[String]) -> Result<()> {
+    for name in filter {
+        if !config.modules.contains_key(name) {
+            let mut message = format!("unknown module `{name}` in --filter");
+            if let Some(suggestion) = nearest_name(name, config.modules.keys()) {
+                message.push_str(&format!("\nhint: did you mean `{suggestion}`?"));
+            }
+            message.push_str("\nhint: run `ripple list` to see all modules");
+            bail!(message);
+        }
+    }
+    report.modules.retain(|m| filter.contains(&m.name));
+    Ok(())
 }
 
 pub fn changed_files(config: &Config, diff: &DiffArgs) -> Result<Vec<String>> {
