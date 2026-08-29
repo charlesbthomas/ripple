@@ -20,6 +20,9 @@ jobs:
       - run: cargo fmt --check
       - run: cargo clippy --all-targets -- -D warnings
       - run: cargo test
+      - run: cargo build
+      - name: Test changed/run.sh against a fixture repo
+        run: bash scripts/test-changed-run.sh
 
   action-self-test:
     strategy:
@@ -35,3 +38,39 @@ jobs:
         with:
           version: v0.1.0
       - run: ripple --version | grep -F "0.1.0"
+
+  changed-action-self-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Synthesize a ripple.toml for this repo
+        run: |
+          cat > ripple.toml <<'EOF'
+          [modules.cli]
+          path = ["src", "tests", "Cargo.toml", "Cargo.lock"]
+
+          [modules.docs]
+          path = ["docs", "README.md"]
+
+          [modules.actions]
+          path = ["action.yml", "changed", "scripts", ".github"]
+          EOF
+      # TODO after v0.2.0: pass filter/fallback inputs, which need list/--filter
+      # from a released binary
+      - uses: ./changed
+        id: ripple
+      - name: Assert output shapes
+        env:
+          MODULES: ${{ steps.ripple.outputs.modules }}
+          MATRIX: ${{ steps.ripple.outputs.matrix }}
+          ANY_CHANGED: ${{ steps.ripple.outputs.any-changed }}
+        run: |
+          jq -e 'type == "array"' <<<"$MODULES"
+          jq -e 'has("include")' <<<"$MATRIX"
+          [[ "$ANY_CHANGED" =~ ^(true|false)$ ]]
