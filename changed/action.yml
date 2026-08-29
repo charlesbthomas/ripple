@@ -1,0 +1,52 @@
+name: Ripple changed
+description: Detect which monorepo modules a push or pull request affects, using ripple
+branding:
+  icon: droplet
+  color: blue
+
+inputs:
+  version:
+    description: Release to install, e.g. "0.2.0" or "v0.2.0", or "latest"
+    required: false
+    default: latest
+  filter:
+    description: Comma-separated module names; restrict the report to these modules
+    required: false
+    default: ""
+  fallback:
+    description: >-
+      What to do when the diff range cannot be determined (new branch, force
+      push, shallow history): "all" treats every module as changed, "error"
+      fails the step
+    required: false
+    default: all
+
+outputs:
+  modules:
+    description: JSON array of affected module names, e.g. ["api","core"]
+    value: ${{ steps.changed.outputs.modules }}
+  matrix:
+    description: GitHub Actions matrix include list, e.g. {"include":[{"module":"api"}]}
+    value: ${{ steps.changed.outputs.matrix }}
+  any-changed:
+    description: '"true" if any module is affected, else "false"'
+    value: ${{ steps.changed.outputs.any-changed }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install ripple
+      shell: bash
+      env:
+        RIPPLE_VERSION: ${{ inputs.version }}
+      run: bash "${GITHUB_ACTION_PATH}/../scripts/install.sh"
+
+    - name: Detect changed modules
+      id: changed
+      shell: bash
+      env:
+        RIPPLE_FILTER: ${{ inputs.filter }}
+        RIPPLE_FALLBACK: ${{ inputs.fallback }}
+        EVENT_BEFORE: ${{ github.event.before }}
+        MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
+      run: bash "${GITHUB_ACTION_PATH}/run.sh"
