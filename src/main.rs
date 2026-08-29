@@ -29,6 +29,7 @@ fn main() {
         } => commands::graph::run(module.as_deref(), *dependents, *deps, *format),
         Command::Explain { module, diff } => commands::explain::run(module, diff),
         Command::Init => commands::init::run(),
+        Command::List { format } => commands::list::run(*format),
         Command::Completions { shell } => {
             let mut command = Cli::command();
             clap_complete::generate(*shell, &mut command, "ripple", &mut std::io::stdout());
