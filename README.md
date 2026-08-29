@@ -37,7 +37,7 @@ cargo install --git https://github.com/charlesbthomas/ripple
 GitHub Actions (installs a release binary and adds it to PATH):
 
 ```yaml
-- uses: charlesbthomas/ripple@v0.1.1
+- uses: charlesbthomas/ripple@v0.2.0
   with:
     version: latest
 ```
@@ -94,9 +94,10 @@ ripple changed HEAD~3..HEAD      # literal diff between two refs
 ripple changed --staged          # staged changes only (pre-commit)
 ripple changed --direct-only     # skip transitive dependents
 ripple changed --strict          # fail if any changed file has no owning module
+ripple changed --filter web,api  # only report on the named modules
 ```
 
-Output formats (`--format`): `table` (default on a TTY), `plain` (default when piped, one module per line), `json`, and `github` (a GitHub Actions matrix include list). Changed files that no module owns are reported on stderr.
+Output formats (`--format`): `table` (default on a TTY), `plain` (default when piped, one module per line), `json`, and `github` (a GitHub Actions matrix include list). Changed files that no module owns are reported on stderr. `--filter` restricts the report to the named modules; unknown names are an error.
 
 ### `ripple validate`
 
@@ -120,13 +121,17 @@ Shows why a module is, or is not, affected: the exact matched files for a direct
 ripple explain web
 ```
 
+### `ripple list`
+
+Lists every configured module in sorted order (`--format plain|json`), without computing a diff.
+
 ### `ripple init` / `ripple completions`
 
 `init` writes a commented starter config. `completions <shell>` generates shell completions for bash, zsh, fish, and others.
 
 ## CI recipes
 
-Run only the affected modules' jobs in GitHub Actions:
+The `changed` action installs ripple, derives the diff range from the triggering event (PRs, pushes, merge queues — with force-push and new-branch handling), and exposes the result as outputs:
 
 ```yaml
 jobs:
@@ -134,16 +139,17 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.ripple.outputs.matrix }}
+      any-changed: ${{ steps.ripple.outputs.any-changed }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - id: ripple
-        run: echo "matrix=$(ripple changed origin/main...HEAD --format github)" >> "$GITHUB_OUTPUT"
+      - uses: charlesbthomas/ripple/changed@v0.2.0
+        id: ripple
 
   test:
     needs: detect
-    if: needs.detect.outputs.matrix != '{"include":[]}'
+    if: needs.detect.outputs.any-changed == 'true'
     strategy:
       matrix: ${{ fromJson(needs.detect.outputs.matrix) }}
     runs-on: ubuntu-latest
@@ -151,6 +157,8 @@ jobs:
       - uses: actions/checkout@v4
       - run: ./ci/test-module.sh ${{ matrix.module }}
 ```
+
+Pass `filter: core,api` to gate a job on specific modules via `any-changed`, and `fallback: all|error` to choose what happens when no diff range can be determined. See the [CI docs](https://charlesbthomas.github.io/ripple/ci/) for the full input/output reference.
 
 Keep the module map honest by validating it and rejecting unowned files:
 
