@@ -1,0 +1,53 @@
+set -euo pipefail
+
+version="${RIPPLE_VERSION#v}"
+
+case "$(uname -s)" in
+  Linux)  os="unknown-linux-gnu" ;;
+  Darwin) os="apple-darwin" ;;
+  *)
+    echo "::error::ripple provides no prebuilt binaries for $(uname -s); only Linux and macOS runners are supported"
+    exit 1
+    ;;
+esac
+
+case "$(uname -m)" in
+  x86_64|amd64)  arch="x86_64" ;;
+  aarch64|arm64) arch="aarch64" ;;
+  *)
+    echo "::error::ripple provides no prebuilt binaries for architecture $(uname -m)"
+    exit 1
+    ;;
+esac
+
+asset="ripple-${arch}-${os}.tar.xz"
+
+if [ "$version" = "latest" ]; then
+  base="https://github.com/charlesbthomas/ripple/releases/latest/download"
+else
+  base="https://github.com/charlesbthomas/ripple/releases/download/v${version}"
+fi
+
+tmp="$(mktemp -d "${RUNNER_TEMP:-/tmp}/ripple-install.XXXXXX")"
+
+if ! curl --proto '=https' --tlsv1.2 -fsSL --retry 3 -o "$tmp/$asset" "$base/$asset"; then
+  echo "::error::failed to download $base/$asset (does release v${version} exist?)"
+  exit 1
+fi
+curl --proto '=https' --tlsv1.2 -fsSL --retry 3 -o "$tmp/$asset.sha256" "$base/$asset.sha256"
+
+(
+  cd "$tmp"
+  if command -v sha256sum >/dev/null 2>&1; then
+    sha256sum -c "$asset.sha256"
+  else
+    shasum -a 256 -c "$asset.sha256"
+  fi
+)
+
+install_dir="$tmp/bin"
+mkdir -p "$install_dir"
+tar -xf "$tmp/$asset" -C "$install_dir" --strip-components=1 "ripple-${arch}-${os}/ripple"
+
+echo "$install_dir" >> "$GITHUB_PATH"
+"$install_dir/ripple" --version
