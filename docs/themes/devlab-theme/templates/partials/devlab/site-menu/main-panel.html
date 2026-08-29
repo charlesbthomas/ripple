@@ -1,0 +1,25 @@
+{# Internal DevLab partial. #}
+
+<div id="site-menu-panel-main" class="site-menu-panel" data-site-menu-panel="main">
+  <nav class="site-menu-nav" aria-label="Main mobile navigation">
+    {% for nav_link in nav_links %}
+    {% if nav_link.kind is defined and nav_link.kind == "docs" and docs_path and docs_section_path %}
+    <div class="site-menu-link-row">
+      {{<devlab.navigation_link nav_link={nav_link} class_name="site-menu-link" active_path={active_path} docs_path={docs_path} blog_path={blog_path} wrap_name={true} />}}
+      <button
+        class="site-menu-link-disclosure"
+        type="button"
+        aria-label="{{ config.extra.menu_docs_label | default(value='Open documentation navigation') }}"
+        aria-controls="site-menu-panel-docs"
+        aria-expanded="false"
+        data-site-menu-panel-target="docs"
+      >
+        <span class="site-menu-link-indicator" aria-hidden="true">&rsaquo;</span>
+      </button>
+    </div>
+    {% else %}
+    {{<devlab.navigation_link nav_link={nav_link} class_name="site-menu-link" active_path={active_path} docs_path={docs_path} blog_path={blog_path} />}}
+    {% endif %}
+    {% endfor %}
+  </nav>
+</div>

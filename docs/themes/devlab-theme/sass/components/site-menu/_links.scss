@@ -1,0 +1,79 @@
+.site-menu-link,
+.site-menu .docs-nav-link,
+.site-menu-back {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+
+  color: var(--color-muted);
+  font: inherit;
+  font-size: 0.95rem;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.site-menu-link-disclosure {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+
+  color: var(--color-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.site-menu-link span,
+.site-menu-back span {
+  min-width: 0;
+}
+
+.site-menu-link,
+.site-menu .docs-nav-link {
+  justify-content: space-between;
+}
+
+.site-menu-link-button,
+.site-menu-back {
+  cursor: pointer;
+}
+
+.site-menu-link:hover,
+.site-menu-link-disclosure:hover,
+.site-menu .docs-nav-link:hover,
+.site-menu-back:hover {
+  background: var(--color-surface);
+  color: var(--color-fg);
+  text-decoration: none;
+}
+
+.site-menu-link.is-active,
+.site-menu .docs-nav-link.is-active {
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-weight: 700;
+}
+
+.site-menu .docs-nav-group-toggle {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.site-menu-link-indicator {
+  color: currentColor;
+  font-size: 1.1rem;
+  line-height: 1;
+}

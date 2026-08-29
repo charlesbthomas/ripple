@@ -1,0 +1,28 @@
+{% set previous_label = config.extra.previous_label | default(value="Previous") %}
+{% set next_label = config.extra.next_label | default(value="Next") %}
+{% set docs_section_path = config.extra.devlab.docs.section | default(value="") %}
+{% set_global docs_previous_path = "" %}
+{% set_global docs_next_path = "" %}
+{% set_global docs_pagination_found = false %}
+
+{% if docs_section_path %}
+{% set docs_page_paths_output = <devlab.docs_page_paths section_path={docs_section_path} content_lang={lang} /> %}
+{% set docs_page_paths = docs_page_paths_output | split(pat=":::") %}
+{% for candidate_path in docs_page_paths %}
+{% if candidate_path %}
+{% if docs_pagination_found %}
+{% if not docs_next_path %}
+{% set_global docs_next_path = candidate_path %}
+{% endif %}
+{% elif candidate_path == page.relative_path %}
+{% set_global docs_pagination_found = true %}
+{% else %}
+{% set_global docs_previous_path = candidate_path %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if docs_pagination_found and (docs_previous_path or docs_next_path) %}
+{% include "partials/devlab/docs-prev-next-links.html" %}
+{% endif %}

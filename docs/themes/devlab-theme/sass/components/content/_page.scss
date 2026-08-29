@@ -1,0 +1,16 @@
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-description {
+  max-width: 60ch;
+  margin: 0;
+
+  color: var(--color-muted);
+  font-size: 1.15rem;
+}
+
+.content {
+  max-width: var(--content-width);
+  overflow-wrap: break-word;
+}

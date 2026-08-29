@@ -1,34 +1,45 @@
 base_url = "https://charlesbthomas.github.io/ripple"
 title = "ripple"
 description = "Monorepo change detection: which modules changed for a given git diff"
+author = "Charlie Thomas"
 default_language = "en"
-theme = "devlab"
-compile_sass = false
+theme = "devlab-theme"
+compile_sass = true
 build_search_index = true
 
+[search]
+include_title = true
+include_description = true
+include_content = true
+
+[markdown]
+insert_anchor_links = "right"
+
 [markdown.highlighting]
-style = "inline"
-theme = "github-light"
+light_theme = "github-light"
+dark_theme = "github-dark"
 
-[extra]
-author = "Charlie Thomas"
-locale = "en_US"
-avatar = ""
-message404 = "Page not found."
+[extra.devlab.brand]
+logo_text = "ripple"
+footer_text = "ripple"
 
-[extra.seo]
-
-[extra.social]
-author_link = "https://github.com/charlesbthomas"
+[extra.devlab.footer]
+note = "Monorepo change detection."
 links = [
-  { url = "https://github.com/charlesbthomas/ripple", name = "GitHub", icon = "bi-github" },
+  { name = "GitHub", path = "https://github.com/charlesbthomas/ripple", icon = "github" },
 ]
 
-[extra.menus]
-nav = [
-  { url = "", name = "Home", icon = "bi-house", display = "visible" },
-  { url = "getting-started", name = "Getting Started", icon = "bi-lightning-charge", display = "visible" },
-  { url = "configuration", name = "Configuration", icon = "bi-gear", display = "visible" },
-  { url = "commands", name = "Commands", icon = "bi-terminal", display = "visible" },
-  { url = "ci", name = "CI", icon = "bi-arrow-repeat", display = "visible" },
+[extra.devlab.navigation]
+links = [
+  { name = "Home", path = "/" },
+  { name = "Docs", path = "/docs/", kind = "docs" },
 ]
+
+[extra.devlab.docs]
+section = "docs/_index.md"
+path = "/docs/"
+get_started_path = "/docs/getting-started/"
+
+[extra.devlab.appearance]
+default_mode = "system"
+show_toggle = true

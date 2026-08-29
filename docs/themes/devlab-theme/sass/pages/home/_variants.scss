@@ -1,0 +1,7 @@
+.home-page-wide .feature-grid,
+.home-page-wide .home-learn {
+  width: min(100% - var(--wide-gutter), var(--wide-width));
+  max-width: none;
+  margin-right: auto;
+  margin-left: auto;
+}

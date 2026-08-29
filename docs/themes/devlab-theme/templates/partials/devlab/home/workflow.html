@@ -1,0 +1,30 @@
+{# Internal DevLab partial. #}
+{% if has_home_workflow %}
+<div class="home-learn-split">
+  <div>
+    <p class="hero-eyebrow">
+      {% if section.extra.home_workflow is defined and section.extra.home_workflow.eyebrow is defined %}{{ section.extra.home_workflow.eyebrow }}{% elif config.extra.home_workflow is defined and config.extra.home_workflow.eyebrow is defined %}{{ config.extra.home_workflow.eyebrow }}{% else %}Workflow{% endif %}
+    </p>
+    <h2>
+      {% if section.extra.home_workflow is defined and section.extra.home_workflow.title is defined %}{{ section.extra.home_workflow.title }}{% elif config.extra.home_workflow is defined and config.extra.home_workflow.title is defined %}{{ config.extra.home_workflow.title }}{% else %}Built for maintainable documentation{% endif %}
+    </h2>
+    <p>
+      {% if section.extra.home_workflow is defined and section.extra.home_workflow.description is defined %}{{ section.extra.home_workflow.description }}{% elif config.extra.home_workflow is defined and config.extra.home_workflow.description is defined %}{{ config.extra.home_workflow.description }}{% else %}DevLab favors reusable partials, Zola section trees and plain Markdown examples, so each feature stays easy to inspect and extend.{% endif %}
+    </p>
+  </div>
+
+  {% if (section.extra.home_workflow is defined and section.extra.home_workflow.points is defined) or (config.extra.home_workflow is defined and config.extra.home_workflow.points is defined) %}
+  <div class="home-learn-points">
+    {% if section.extra.home_workflow is defined and section.extra.home_workflow.points is defined %}
+    {% for point in section.extra.home_workflow.points %}
+    {{<devlab.workflow_point point={point} />}}
+    {% endfor %}
+    {% elif config.extra.home_workflow is defined and config.extra.home_workflow.points is defined %}
+    {% for point in config.extra.home_workflow.points %}
+    {{<devlab.workflow_point point={point} />}}
+    {% endfor %}
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endif %}

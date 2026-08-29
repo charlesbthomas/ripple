@@ -1,0 +1,70 @@
+.home-learn-split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  gap: 3rem;
+  align-items: start;
+
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.home-learn-points {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.home-learn-point {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.home-learn-point p {
+  margin: 0;
+
+  color: var(--color-fg);
+  font-weight: 700;
+}
+
+.home-learn-point span {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
+.home-page-wide .home-learn-split {
+  grid-template-columns: minmax(22rem, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(3rem, 7vw, 7rem);
+
+  width: 100%;
+  max-width: none;
+}
+
+.home-page-wide .home-learn-split > div:first-child {
+  max-width: 36rem;
+}
+
+.home-page-wide .home-learn-split h2 {
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.home-page-wide .home-learn-split > div:first-child > p:last-child {
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+.home-page-wide .home-learn-points {
+  gap: 2rem;
+}
+
+.home-page-wide .home-learn-point {
+  gap: 0.4rem;
+}
+
+.home-page-wide .home-learn-point p {
+  font-size: 1.1rem;
+}
+
+.home-page-wide .home-learn-point span {
+  max-width: 52rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
