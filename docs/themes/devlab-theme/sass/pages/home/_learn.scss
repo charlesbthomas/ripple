@@ -1,0 +1,74 @@
+.home-learn {
+  display: grid;
+  gap: 4rem;
+  margin-right: auto;
+  margin-left: auto;
+
+  margin-top: 5rem;
+  padding-top: 4rem;
+}
+
+.home-learn-header {
+  max-width: 44rem;
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+.home-learn-header h2,
+.home-learn-split h2,
+.home-learn-cta h2 {
+  margin: 0 0 0.75rem;
+
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.home-learn-header p:last-child,
+.home-learn-split p:last-child,
+.home-learn-cta p {
+  margin: 0;
+
+  color: var(--color-muted);
+}
+
+.home-learn-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.home-learn-card {
+  padding: 1rem;
+
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: var(--color-surface);
+}
+
+.home-learn-card-kicker {
+  margin: 0 0 0.5rem;
+
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-learn-card h3 {
+  margin: 0 0 0.5rem;
+
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.home-learn-card p:last-child {
+  margin: 0;
+
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}

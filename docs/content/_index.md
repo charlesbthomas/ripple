@@ -1,7 +1,18 @@
 +++
 title = "ripple"
 description = "Monorepo change detection: which modules changed for a given git diff"
-template = "index.html"
+
+[extra]
+home_eyebrow = "Monorepo change detection"
+home_primary_action_label = "Get started"
+home_primary_action_path = "/docs/getting-started/"
+home_secondary_action_label = "View docs"
+home_secondary_action_path = "/docs/"
+home_features = [
+  { kicker = "Detect", title = "Direct and indirect changes", description = "Reports the modules whose files changed and every module that transitively depends on them — the ripple effect." },
+  { kicker = "Declare", title = "One config file", description = "Describe your module map once in ripple.toml, then use the same answer locally and in CI." },
+  { kicker = "CI", title = "Run only what changed", description = "Composite GitHub Actions expose changed modules as job outputs — no shell scripting required." },
+]
 +++
 
 Ripple answers one question: given a git diff, **which modules of your monorepo changed?** It reports both the modules whose files changed and every module that transitively depends on them — the ripple effect.
@@ -24,7 +35,7 @@ Declare your dependency graph once in `ripple.toml`, then use one command locall
 brew install charlesbthomas/tap/ripple
 ```
 
-Requires `git` on your PATH. See [Getting Started](@/getting-started.md) for other install methods.
+Requires `git` on your PATH. See [Getting Started](@/docs/getting-started.md) for other install methods.
 
 ## Quick start
 
@@ -38,7 +49,7 @@ ripple changed         # what does your current work affect?
 
 ## Learn more
 
-- [Getting Started](@/getting-started.md) — install ripple and wire up your first module map
-- [Configuration](@/configuration.md) — the `ripple.toml` reference
-- [Commands](@/commands.md) — `changed`, `validate`, `graph`, `explain`, `init`, `completions`
-- [CI](@/ci.md) — run only affected modules' jobs in GitHub Actions
+- [Getting Started](@/docs/getting-started.md) — install ripple and wire up your first module map
+- [Configuration](@/docs/configuration.md) — the `ripple.toml` reference
+- [Commands](@/docs/commands.md) — `changed`, `validate`, `graph`, `explain`, `init`, `completions`
+- [CI](@/docs/ci.md) — run only affected modules' jobs in GitHub Actions

@@ -1,0 +1,28 @@
+{# Internal DevLab partial. #}
+{% if has_home_learn %}
+<div class="home-learn-header">
+  <p class="hero-eyebrow">
+    {% if section.extra.home_learn is defined and section.extra.home_learn.eyebrow is defined %}{{ section.extra.home_learn.eyebrow }}{% elif config.extra.home_learn is defined and config.extra.home_learn.eyebrow is defined %}{{ config.extra.home_learn.eyebrow }}{% else %}Features{% endif %}
+  </p>
+  <h2 id="home-learn-title">
+    {% if section.extra.home_learn is defined and section.extra.home_learn.title is defined %}{{ section.extra.home_learn.title }}{% elif config.extra.home_learn is defined and config.extra.home_learn.title is defined %}{{ config.extra.home_learn.title }}{% else %}Why DevLab is different{% endif %}
+  </h2>
+  <p>
+    {% if section.extra.home_learn is defined and section.extra.home_learn.description is defined %}{{ section.extra.home_learn.description }}{% elif config.extra.home_learn is defined and config.extra.home_learn.description is defined %}{{ config.extra.home_learn.description }}{% else %}DevLab keeps the theme small and Zola-native while giving documentation sites the navigation patterns readers expect.{% endif %}
+  </p>
+</div>
+
+{% if (section.extra.home_learn is defined and section.extra.home_learn.cards is defined) or (config.extra.home_learn is defined and config.extra.home_learn.cards is defined) %}
+<div class="home-learn-grid">
+  {% if section.extra.home_learn is defined and section.extra.home_learn.cards is defined %}
+  {% for card in section.extra.home_learn.cards %}
+  {{<devlab.home_learn_card card={card} />}}
+  {% endfor %}
+  {% elif config.extra.home_learn is defined and config.extra.home_learn.cards is defined %}
+  {% for card in config.extra.home_learn.cards %}
+  {{<devlab.home_learn_card card={card} />}}
+  {% endfor %}
+  {% endif %}
+</div>
+{% endif %}
+{% endif %}

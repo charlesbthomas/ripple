@@ -1,0 +1,19 @@
+.home-learn-cta {
+  display: grid;
+  justify-items: center;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2rem;
+
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: var(--color-surface);
+
+  text-align: center;
+}
+
+.home-page-wide .home-learn-cta {
+  width: min(100%, 72rem);
+  max-width: none;
+  padding: clamp(2rem, 4vw, 3rem);
+}
