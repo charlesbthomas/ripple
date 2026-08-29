@@ -62,6 +62,15 @@ ripple graph --format mermaid     # whole graph for a markdown doc
 ripple graph --format dot | dot -Tsvg > graph.svg
 ```
 
+## `ripple list`
+
+Lists every configured module in sorted order, without computing a diff. Useful in scripts that need the full module set, e.g. to treat everything as changed when CI cannot determine a diff range.
+
+```sh
+ripple list                    # one module name per line
+ripple list --format json     # JSON array of module names
+```
+
 ## `ripple explain`
 
 Shows why a module is, or is not, affected: the exact matched files for a direct change, or the dependency chain for an indirect one. Accepts the same diff selection as `ripple changed`.

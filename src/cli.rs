@@ -167,6 +167,29 @@ Examples:
     Init,
 
     #[command(
+        about = "List all configured modules",
+        long_about = "\
+List every module declared in ripple.toml (including included fragments), one
+per line, in sorted order.
+
+Useful for scripting: it enumerates the full module set without computing a
+diff, e.g. to treat every module as changed when CI cannot determine a range.",
+        after_long_help = "\
+Examples:
+  ripple list                    One module name per line
+  ripple list --format json      JSON array of module names"
+    )]
+    List {
+        #[arg(
+            long,
+            value_enum,
+            default_value_t = ListFormat::Plain,
+            help = "Output format"
+        )]
+        format: ListFormat,
+    },
+
+    #[command(
         about = "Generate shell completions",
         long_about = "\
 Generate a completion script for your shell on stdout.
@@ -214,4 +237,10 @@ pub enum GraphFormat {
     Tree,
     Dot,
     Mermaid,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq, ValueEnum)]
+pub enum ListFormat {
+    Plain,
+    Json,
 }

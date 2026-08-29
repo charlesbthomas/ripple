@@ -361,6 +361,30 @@ fn graph_emits_dot_and_mermaid() {
 }
 
 #[test]
+fn list_prints_all_modules() {
+    let dir = fixture();
+    ripple(dir.path())
+        .arg("list")
+        .assert()
+        .success()
+        .stdout("api\ncore\ndocs\nweb\n");
+}
+
+#[test]
+fn list_json_emits_module_names() {
+    let dir = fixture();
+    let output = ripple(dir.path())
+        .args(["list", "--format", "json"])
+        .assert()
+        .success()
+        .get_output()
+        .stdout
+        .clone();
+    let names: Vec<String> = serde_json::from_slice(&output).unwrap();
+    assert_eq!(names, ["api", "core", "docs", "web"]);
+}
+
+#[test]
 fn init_scaffolds_and_refuses_overwrite() {
     let dir = TempDir::new().unwrap();
     ripple(dir.path())
