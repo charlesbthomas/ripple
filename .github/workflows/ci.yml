@@ -61,10 +61,10 @@ jobs:
           [modules.actions]
           path = ["action.yml", "changed", "scripts", ".github"]
           EOF
-      # TODO after v0.2.0: pass filter/fallback inputs, which need list/--filter
-      # from a released binary
       - uses: ./changed
         id: ripple
+        with:
+          version: 0.2.0
       - name: Assert output shapes
         env:
           MODULES: ${{ steps.ripple.outputs.modules }}
@@ -74,3 +74,12 @@ jobs:
           jq -e 'type == "array"' <<<"$MODULES"
           jq -e 'has("include")' <<<"$MATRIX"
           [[ "$ANY_CHANGED" =~ ^(true|false)$ ]]
+      - uses: ./changed
+        id: ripple-filtered
+        with:
+          version: 0.2.0
+          filter: cli,docs
+      - name: Assert filter restricts modules
+        env:
+          MODULES: ${{ steps.ripple-filtered.outputs.modules }}
+        run: jq -e 'all(.[]; . == "cli" or . == "docs")' <<<"$MODULES"
